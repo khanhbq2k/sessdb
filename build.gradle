@@ -1,42 +1,41 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
 allprojects {
-	repositories {
-		mavenLocal()
-		mavenCentral()
-	}
-}
+    apply plugin: "java"
+    apply plugin: "jacoco"
 
-apply from: file('gradle/versioning.gradle')
-apply from: file('gradle/convention.gradle')
-
-subprojects {
-	group = "com.ctriposs.sdb"
-
-    dependencies {
-        testCompile 'junit:junit:4.11'
-		testCompile 'org.slf4j:slf4j-simple:1.7.5'
+    repositories {
+        jcenter()
+        mavenCentral()
     }
-}
-
-project(':core') {
-	archivesBaseName = 'sessdb'
 
     dependencies {
-        compile 'com.google.guava:guava:16.0.1'
-        compile 'org.xerial.snappy:snappy-java:1.0.4.1'
-        compile 'org.slf4j:slf4j-api:1.7.5'
+        implementation 'com.google.guava:guava:18.0'
+        implementation 'org.xerial.snappy:snappy-java:1.0.4.1'
+        implementation 'org.slf4j:slf4j-api:1.7.5'
+
+//        implementation 'com.ctriposs:bigmap:1.0.0'
+        implementation 'com.sleepycat:je:5.0.73'
+        implementation 'org.mapdb:mapdb:1.0.1'
+
+        testImplementation 'org.slf4j:slf4j-nop:1.7.25'
+
+        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+
+        testImplementation 'junit:junit:4.12'
+        testImplementation 'org.slf4j:slf4j-simple:1.7.30'
     }
-}
 
-project(':benchmark') {
-    apply plugin:'application'
-    mainClassName = 'com.ctriposs.sdb.benchmark.SdbBenchmark'
-
-    dependencies {
-        compile project(':core');
-        compile 'com.ctriposs:bigmap:1.0.0'
-        compile 'com.sleepycat:je:5.0.73'
-        compile 'org.mapdb:mapdb:1.0.1'
-        runtime 'org.slf4j:slf4j-nop:1.7.5'
+    test {
+        useJUnitPlatform()
     }
 }
 
